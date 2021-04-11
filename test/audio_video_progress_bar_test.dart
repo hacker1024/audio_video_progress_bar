@@ -31,6 +31,7 @@ void main() {
         bufferedBarColor: Color(0x00000000),
         thumbRadius: 20.0,
         thumbColor: Color(0x00000000),
+        thumbGlowRadius: 50.0,
         thumbGlowColor: Color(0x00000000),
         timeLabelLocation: TimeLabelLocation.sides,
         timeLabelTextStyle: const TextStyle(color: Color(0x00000000)),
@@ -50,6 +51,7 @@ void main() {
     expect(progressBar.bufferedBarColor, Color(0x00000000));
     expect(progressBar.thumbRadius, 20.0);
     expect(progressBar.thumbColor, Color(0x00000000));
+    expect(progressBar.thumbGlowRadius, 50.0);
     expect(progressBar.thumbGlowColor, Color(0x00000000));
     expect(progressBar.timeLabelLocation, TimeLabelLocation.sides);
     expect(progressBar.timeLabelTextStyle,

@@ -38,6 +38,7 @@ class ProgressBar extends LeafRenderObjectWidget {
     this.bufferedBarColor,
     this.thumbRadius = 10.0,
     this.thumbColor,
+    this.thumbGlowRadius = 30.0,
     this.thumbGlowColor,
     this.timeLabelLocation,
     this.timeLabelTextStyle,
@@ -95,6 +96,12 @@ class ProgressBar extends LeafRenderObjectWidget {
   /// By default it is your theme's primary color.
   final Color? thumbColor;
 
+  /// The radius of the circle for the pressed-down effect of the moveable
+  /// progress bar thumb.
+  ///
+  /// By default it is 30.
+  final double thumbGlowRadius;
+
   /// The color of the pressed-down effect of the moveable progress bar thumb.
   ///
   /// By default it is [thumbColor] with an alpha value of 80.
@@ -127,6 +134,7 @@ class ProgressBar extends LeafRenderObjectWidget {
       bufferedBarColor: bufferedBarColor ?? primaryColor.withOpacity(0.24),
       thumbRadius: thumbRadius,
       thumbColor: thumbColor ?? primaryColor,
+      thumbGlowRadius: thumbGlowRadius,
       thumbGlowColor:
           thumbGlowColor ?? (thumbColor ?? primaryColor).withAlpha(80),
       timeLabelLocation: timeLabelLocation ?? TimeLabelLocation.below,
@@ -151,6 +159,7 @@ class ProgressBar extends LeafRenderObjectWidget {
       ..bufferedBarColor = bufferedBarColor ?? primaryColor.withOpacity(0.24)
       ..thumbRadius = thumbRadius
       ..thumbColor = thumbColor ?? primaryColor
+      ..thumbGlowRadius = thumbGlowRadius
       ..thumbGlowColor =
           thumbGlowColor ?? (thumbColor ?? primaryColor).withAlpha(80)
       ..timeLabelLocation = timeLabelLocation ?? TimeLabelLocation.below
@@ -171,6 +180,7 @@ class ProgressBar extends LeafRenderObjectWidget {
     properties.add(ColorProperty('bufferedBarColor', bufferedBarColor));
     properties.add(DoubleProperty('thumbRadius', thumbRadius));
     properties.add(ColorProperty('thumbColor', thumbColor));
+    properties.add(DoubleProperty('thumbGlowRadius', thumbGlowRadius));
     properties.add(ColorProperty('thumbGlowColor', thumbGlowColor));
     properties
         .add(StringProperty('timeLabelLocation', timeLabelLocation.toString()));
@@ -191,6 +201,7 @@ class _RenderProgressBar extends RenderBox {
     required Color bufferedBarColor,
     double thumbRadius = 20.0,
     required Color thumbColor,
+    double thumbGlowRadius = 30.0,
     required Color thumbGlowColor,
     required TimeLabelLocation timeLabelLocation,
     TextStyle? timeLabelTextStyle,
@@ -204,6 +215,7 @@ class _RenderProgressBar extends RenderBox {
         _bufferedBarColor = bufferedBarColor,
         _thumbRadius = thumbRadius,
         _thumbColor = thumbColor,
+        _thumbGlowRadius = thumbGlowRadius,
         _thumbGlowColor = thumbGlowColor,
         _timeLabelLocation = timeLabelLocation,
         _timeLabelTextStyle = timeLabelTextStyle {
@@ -398,6 +410,15 @@ class _RenderProgressBar extends RenderBox {
   set thumbRadius(double value) {
     if (_thumbRadius == value) return;
     _thumbRadius = value;
+    markNeedsLayout();
+  }
+
+  /// The length of the radius of the pressed-down effect of the moveable thumb.
+  double get thumbGlowRadius => _thumbGlowRadius;
+  double _thumbGlowRadius;
+  set thumbGlowRadius(double value) {
+    if (_thumbGlowRadius == value) return;
+    _thumbGlowRadius = value;
     markNeedsLayout();
   }
 
@@ -626,7 +647,7 @@ class _RenderProgressBar extends RenderBox {
     final center = Offset(thumbDx, localSize.height / 2);
     if (_userIsDraggingThumb) {
       final thumbGlowPaint = Paint()..color = thumbGlowColor;
-      canvas.drawCircle(center, 30, thumbGlowPaint);
+      canvas.drawCircle(center, thumbGlowRadius, thumbGlowPaint);
     }
     canvas.drawCircle(center, thumbRadius, thumbPaint);
   }
